@@ -163,7 +163,7 @@ public class MaterialTextField extends FrameLayout {
                     .scaleY(1f)
                     .setDuration(ANIMATION_DURATION);
 
-            handleAnimation(!expanded);
+            handleAnimation(expanded);
 
             if (OPEN_KEYBOARD_ON_FOCUS) {
                 inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
