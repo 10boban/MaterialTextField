@@ -108,7 +108,8 @@ public class MaterialTextField extends FrameLayout {
                     @Override
                     public void onAnimationEnd(View view) {
                         if (!expanded) {
-                            editText.setVisibility(View.INVISIBLE);
+                            editText.getText().clear();
+                            editText.setVisibility(INVISIBLE);
                         }
                     }
 
@@ -132,29 +133,44 @@ public class MaterialTextField extends FrameLayout {
     public void expand() {
         if (!expanded) {
             ViewCompat.animate(editText)
-                .alpha(1f)
-                .setDuration(ANIMATION_DURATION);
+                    .alpha(1f)
+                    .setDuration(ANIMATION_DURATION)
+                    .setListener(new ViewPropertyAnimatorListener() {
+                        @Override
+                        public void onAnimationStart(View view) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(View view) {
+                            if (editText != null && editText.getVisibility() != VISIBLE) {
+                                editText.setVisibility(VISIBLE);
+                                editText.requestFocus();
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationCancel(View view) {
+
+                        }
+                    });
 
             ViewCompat.animate(card)
-                .scaleY(1f)
-                .setDuration(ANIMATION_DURATION);
+                    .scaleY(1f)
+                    .setDuration(ANIMATION_DURATION);
 
             ViewCompat.animate(label)
-                .alpha(0.4f)
-                .scaleX(0.7f)
-                .scaleY(0.7f)
-                .translationY(-labelTopMargin)
-                .setDuration(ANIMATION_DURATION);
+                    .alpha(0.4f)
+                    .scaleX(0.7f)
+                    .scaleY(0.7f)
+                    .translationY(-labelTopMargin)
+                    .setDuration(ANIMATION_DURATION);
 
             ViewCompat.animate(image)
-                .alpha(1f)
-                .scaleX(1f)
-                .scaleY(1f)
-                .setDuration(ANIMATION_DURATION);
-
-            if (editText != null) {
-                editText.requestFocus();
-            }
+                    .alpha(1f)
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(ANIMATION_DURATION);
 
             if (OPEN_KEYBOARD_ON_FOCUS) {
                 inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
