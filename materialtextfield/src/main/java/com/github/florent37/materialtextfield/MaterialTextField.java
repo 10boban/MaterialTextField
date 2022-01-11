@@ -143,8 +143,9 @@ public class MaterialTextField extends FrameLayout {
 
                         @Override
                         public void onAnimationEnd(View view) {
-                            if (editText != null && editText.getVisibility() != VISIBLE) {
-                                editText.setVisibility(VISIBLE);
+                            if (editText != null) {
+                                if (editText.getVisibility() != VISIBLE)
+                                    editText.setVisibility(VISIBLE);
                                 editText.requestFocus();
                             }
                         }
