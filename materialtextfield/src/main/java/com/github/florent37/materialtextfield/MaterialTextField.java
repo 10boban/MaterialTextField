@@ -17,7 +17,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 public class MaterialTextField extends FrameLayout {
     protected InputMethodManager inputMethodManager;
 
@@ -69,57 +68,61 @@ public class MaterialTextField extends FrameLayout {
         }
     }
 
+    private void handleAnimation(boolean expanded) {
+
+        ViewCompat.animate(label)
+                .alpha(expanded ? 1 : 0.4f)
+                .scaleX(expanded ? 1 : 0.7f)
+                .scaleY(expanded ? 1 : 0.7f)
+                .translationY(expanded ? 0 : -labelTopMargin)
+                .setDuration(ANIMATION_DURATION);
+
+        ViewCompat.animate(image)
+                .alpha(expanded ? 0 : 1f)
+                .scaleX(expanded ? 0.4f : 1f)
+                .scaleY(expanded ? 0.4f : 1f)
+                .setDuration(ANIMATION_DURATION);
+    }
+
     public void reduce() {
         if (expanded) {
             final int heightInitial = getContext().getResources().getDimensionPixelOffset(R.dimen.mtf_cardHeight_final);
 
-            ViewCompat.animate(label)
-                .alpha(1)
-                .scaleX(1)
-                .scaleY(1)
-                .translationY(0)
-                .setDuration(ANIMATION_DURATION);
-
-            ViewCompat.animate(image)
-                .alpha(0)
-                .scaleX(0.4f)
-                .scaleY(0.4f)
-                .setDuration(ANIMATION_DURATION);
-
+            handleAnimation(expanded);
             ViewCompat.animate(editText)
-                .alpha(1f)
-                .setUpdateListener(new ViewPropertyAnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(View view) {
-                        float value = ViewCompat.getAlpha(view); //percentage
-                        card.getLayoutParams().height = (int) (value * (heightInitial - cardCollapsedHeight) + cardCollapsedHeight);
-                        card.requestLayout();
-                    }
-                })
-                .setDuration(ANIMATION_DURATION)
-                .setListener(new ViewPropertyAnimatorListener() {
-                    @Override
-                    public void onAnimationStart(View view) {
-                        if (expanded) {
-                            editText.setVisibility(View.VISIBLE);
+                    .alpha(1f)
+                    .setUpdateListener(new ViewPropertyAnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(View view) {
+                            float value = ViewCompat.getAlpha(view); //percentage
+                            card.getLayoutParams().height = (int) (value * (heightInitial - cardCollapsedHeight) + cardCollapsedHeight);
+                            card.requestLayout();
                         }
-                    }
-
-                    @Override
-                    public void onAnimationEnd(View view) {
-                        if (!expanded) {
-                            editText.getText().clear();
-                            editText.setVisibility(INVISIBLE);
+                    })
+                    .setDuration(ANIMATION_DURATION)
+                    .setListener(new ViewPropertyAnimatorListener() {
+                        @Override
+                        public void onAnimationStart(View view) {
+                            if (expanded) {
+                                editText.setVisibility(View.VISIBLE);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onAnimationCancel(View view) { }
-                });
+                        @Override
+                        public void onAnimationEnd(View view) {
+                            if (!expanded) {
+                                editText.getText().clear();
+                                editText.setVisibility(INVISIBLE);
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationCancel(View view) { }
+                    });
 
             ViewCompat.animate(card)
-                .scaleY(reducedScale)
-                .setDuration(ANIMATION_DURATION);
+                    .scaleY(reducedScale)
+                    .setDuration(ANIMATION_DURATION);
 
             if (editText.hasFocus()) {
                 inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
@@ -160,18 +163,7 @@ public class MaterialTextField extends FrameLayout {
                     .scaleY(1f)
                     .setDuration(ANIMATION_DURATION);
 
-            ViewCompat.animate(label)
-                    .alpha(0.4f)
-                    .scaleX(0.7f)
-                    .scaleY(0.7f)
-                    .translationY(-labelTopMargin)
-                    .setDuration(ANIMATION_DURATION);
-
-            ViewCompat.animate(image)
-                    .alpha(1f)
-                    .scaleX(1f)
-                    .scaleY(1f)
-                    .setDuration(ANIMATION_DURATION);
+            handleAnimation(!expanded);
 
             if (OPEN_KEYBOARD_ON_FOCUS) {
                 inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
