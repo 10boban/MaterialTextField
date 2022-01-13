@@ -215,7 +215,7 @@ public class MaterialTextField extends FrameLayout {
                     editText.requestFocusFromTouch();
                     inputMethodManager.showSoftInput(editText, 0);
                 }
-            }, 300);
+            }, 250);
         } else {
             reduce();
         }
@@ -226,7 +226,7 @@ public class MaterialTextField extends FrameLayout {
             TypedArray styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.MaterialTextField);
 
             {
-                ANIMATION_DURATION = styledAttrs.getInteger(R.styleable.MaterialTextField_mtf_animationDuration, 400);
+                ANIMATION_DURATION = styledAttrs.getInteger(R.styleable.MaterialTextField_mtf_animationDuration, 450);
             }
             {
                 OPEN_KEYBOARD_ON_FOCUS = styledAttrs.getBoolean(R.styleable.MaterialTextField_mtf_openKeyboardOnFocus, false);
@@ -271,13 +271,13 @@ public class MaterialTextField extends FrameLayout {
 
         addView(LayoutInflater.from(getContext()).inflate(R.layout.mtf_layout, this, false));
 
-        editTextLayout = (ViewGroup) findViewById(R.id.mtf_editTextLayout);
+        editTextLayout = findViewById(R.id.mtf_editTextLayout);
         removeView(editText);
         editTextLayout.addView(editText);
 
-        label = (TextView) findViewById(R.id.mtf_label);
-        ViewCompat.setPivotX(label, 0);
-        ViewCompat.setPivotY(label, 0);
+        label = findViewById(R.id.mtf_label);
+        label.setPivotX(0);
+        label.setPivotY(0);
 
         if (editText.getHint() != null) {
             label.setText(editText.getHint());
